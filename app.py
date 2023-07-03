@@ -130,7 +130,7 @@ def bolsa():
     else:
         return render_template("bolsa.html")
 
-
+#ESTAMOS ACA
 @app.route("/ronda", methods=["GET", "POST"])
 @login_required
 def ronda():
@@ -138,12 +138,9 @@ def ronda():
     if request.method=="POST":
         prensa = request.form.get("prensa")
         bolsa = request.form.get("bolsa")
-        subconjunto={}
-        # Testeas que devuelve este request form de abajo
-        for miembro in miembros:
-            subconjunto[miembro]=request.form.get("miembro")
-        
-        
+
+       #TO DO, recoger la informacion de la gente que tomo 
+
             
          
         
