@@ -115,37 +115,54 @@ def bolsa():
         name = request.form.get("name")
         price = request.form.get("price")
         brand = request.form.get("brand")
+        grams = request.form.get("grams")
          
-        #Checar que recibe un numero
+        #Checar que recibe un numero como precio
         if not price.isdigit():
-        return apology("Precio debe ser un numero entero, por ejemplo 2500")
+            return apology("Precio debe ser un numero entero, por ejemplo 2500")
+        #Checar que recibe un numero como gramos
+        if not grams.isdigit():
+            return apology("Gramos debe ser un numero entero, por ejemplo 1000")
         #Checar que es mayor que 1000
         price = int(price)
         if price < 1000:
-        return apology("Precio esta raro")
+            return apology("Precio esta raro")
         
         # Ojo con el uso de datetime aqui
-        db.execute("INSERT INTO bolsas (user_id, name, brand, price, date, active) VALUES (?,?,?,?,?)", session["user_id"], name, brand, int(price), datetime.now(), "YES")
+        db.execute("INSERT INTO bolsas (user_id, name, brand, price, grams, date, active) VALUES (?,?,?,?,?,?,?)", session["user_id"], name, brand, int(price), int(grams), datetime.datetime.now(), "YES")
         return redirect("/")
     else:
         return render_template("bolsa.html")
 
-#ESTAMOS ACA
 @app.route("/ronda", methods=["GET", "POST"])
 @login_required
 def ronda():
     """Registrar ronda de cafe"""
+    
+    #Creamos todas las listas necesarias para las opciones
+    db_miembros = db.execute("SELECT username FROM users");
+    miembros = [entry[username] for entry in db_miembros]
+    prensas = db.execute("SELECT username, capacity FROM users JOIN prensas ON prensas.owner_id = users.id")
+    bolsas = db.execute("SELECT origin, toaster, id FROM bolsas")
+    
+
     if request.method=="POST":
         prensa = request.form.get("prensa")
         bolsa = request.form.get("bolsa")
 
-       #TO DO, recoger la informacion de la gente que tomo 
+        #Quienes tomaron
+        tomadores=[]
+        for miembro in miembros:
+            if check = request.form.get(miembro, default=False, type=bool):
+                tomadores.append(miembro)
 
-            
-         
+        #Procesar esta info y botar precios
+        costo = price(len(tomadores), prensas[prensa][capacity]], bolsas[bolsa][price])
+
+
+
+        #Meter a la base de datos
         
-        # Ojo con el uso de datetime aqui
-        #db.execute("INSERT INTO bolsas (user_id, name, brand, price, date, active) VALUES (?,?,?,?,?)", session["user_id"], name, brand, int(price), datetime.now(), "YES")
         return redirect("/")
     else:
         return render_template("ronda.html")

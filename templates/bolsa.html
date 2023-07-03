@@ -5,18 +5,24 @@
 {% endblock %}
 
 {% block main %}
-<p> <b> Nota </b> El precio debe estar en CLP sin puntos ni comas.<br> Ejemplo dos mil quinientos pesos se escribe como 2500. </p>
-	<form action="/bolsa" method="post">
-		<div class="mb-3">
-			<input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="name" placeholder="Nombre" type="text">
-		</div>
-		<div class="mb-3">
-			<input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="brand" placeholder="Marca" type="text" >
-		</div>
-		<div class="mb-3">
-			<input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="price" placeholder="Precio" type="text" >
-		</div>
-		<button class="btn btn-primary" type="submit"> Registrar bolsa </button>
-	</form>
+<p> <b> Nota </b> El precio debe estar en CLP sin puntos ni comas. Lo mismo para la cantidad de gramos.<br> 
+	Ejemplo dos mil quinientos pesos se escribe como 2500. 
+</p>
+
+<form action="/bolsa" method="post">
+	<div class="mb-3">
+		<input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="name" placeholder="Nombre" type="text">
+	</div>
+	<div class="mb-3">
+		<input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="brand" placeholder="Marca" type="text" >
+	</div>
+	<div class="mb-3">
+		<input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="price" placeholder="Precio" type="text" >
+	</div>
+	<div class="mb-3">
+		<input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="grams" placeholder="Gramos" type="text" >
+	</div>
+	<button class="btn btn-primary" type="submit"> Registrar bolsa </button>
+</form>
 {% endblock %}
 

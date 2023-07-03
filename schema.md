@@ -13,26 +13,19 @@ CREATE TABLE bolsas (
     user_id INTEGER,
     brand TEXT,
     price INTEGER,
+    grams INTEGER,
     name TEXT NOT NULL,
     date DATE,
     active TEXT NOT NULL,
     FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
-CREATE TABLE transactions (
-    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    user_id INTEGER,
-    symbol TEXT NOT NULL,
-    shares INTEGER,
-    price FLOAT,
-    date DATETIME,
-    FOREIGN KEY(user_id) REFERENCES users(id)
-);
 
 CREATE TABLE rondas (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     prensa_id INTEGER,
     bolsa_id INTEGER,
+    cost INTEGER,
     date DATETIME,
     FOREIGN KEY(bolsa_id) REFERENCES bolsas(id),
     FOREIGN KEY(prensa_id) REFERENCES prensas(id),
