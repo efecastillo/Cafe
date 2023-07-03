@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block title %}
+	Ronda de cafe
+{% endblock %}
+
+{% block main %}
+	<form action="/ronda" method="post">
+    <div class="mb-3">
+        <select class="form-select mx-auto w-auto" name="prensa">
+            <option disabled selected>Prensa</option>
+            {% for prensa in prensas%}
+                <option value="{{prensa}}">{{stock}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <select class="form-select mx-auto w-auto" name="bolsa">
+            <option disabled selected>Cafe</option>
+            {% for cafe in bolsas%}
+                <option value="{{cafe}}">{{stock}}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    {% for miembro in miembros%}
+    <div class="form-check">
+			<input class="form-check-input" type="checkbox" value="" name="{{miembro}}">
+        <label class="form-check-label" for="flexCheckDefault">
+            {{miembro}}
+        </label>
+    </div>
+    {% endfor %}
+    <button class="btn btn-primary" type="submit"> Registrar ronda de Cafe </button>
+	</form>
+{% endblock %}
+
