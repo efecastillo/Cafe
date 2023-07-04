@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block title %}
+	Nueva Prensa
+{% endblock %}
+
+{% block main %}
+<p> 
+Favor revisar bien la capacidad en mililitros. Debera entrar un numero entero positivo.
+</p>
+
+<form action="/prensa" method="post">
+	<div class="mb-3">
+	<div class="mb-3">
+		<input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="capacity" placeholder="Capacidad en mL" type="text" >
+	</div>
+	<button class="btn btn-primary" type="submit"> Registrar prensa </button>
+</form>
+{% endblock %}
+

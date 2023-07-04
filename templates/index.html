@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block title %}
+	Inicio
+{% endblock %}
+
+{% block main %}
+<p> Bienvenido <b>{{username}}! </b> <br>
+{% if french=="" %}
+No tienes registrada ninguna prensa francesa.
+Considera aportar a la economia local y <a href="https://cafestore.cl/categoria-producto/metodos-manuales/prensa-francesa/" target="_blank"> Comprar </a>. <br>
+Si ya tienes una y deseas compartir con el Club puedes <a href="/prensa"> registrarla </a>.
+{% endif %}
+{% if french!="" %}
+Gracias por compartir tu prensa francesa de {{french}} mL.
+{% endif %}
+</p>
+
+
+{% endblock %}
+
