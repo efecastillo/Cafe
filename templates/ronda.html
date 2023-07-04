@@ -10,7 +10,7 @@
         <select class="form-select mx-auto w-auto" name="prensa">
             <option disabled selected>Prensa</option>
             {% for prensa in prensas%}
-                <option value="{{prensa}}">{{stock}}</option>
+			<option value="{{prensa[prensa.id]}}">{{prensa.username}} {{ prensa.capacity }} mL</option>
             {% endfor %}
         </select>
     </div>
@@ -18,7 +18,7 @@
         <select class="form-select mx-auto w-auto" name="bolsa">
             <option disabled selected>Cafe</option>
             {% for cafe in bolsas%}
-                <option value="{{cafe}}">{{stock}}</option>
+			<option value="{{cafe.id}}">{{cafe.origin}} {{cafe.toaster}}</option>
             {% endfor %}
         </select>
     </div>

@@ -47,15 +47,19 @@ def price (n, v, p, q):
     p -> precio de la bolsa
     q -> peso de la bolsa
     """
-    prensa_fee = 
+    app_fee = 0
+    prensa_fee = 0
     gramos_cafe = int((v*60)/1000)
     precio_gramo = int(precio/q)
 
     costo_taza_cafe = int((gramos_cafe * precio_gramo) / n);
     #Redondeando hacia arriba hasta el proximo multiplo de 50 CLP
     costo_taza_cafe = math.ceil( costo_taza_cafe / 50 ) * 50;
-
     #Sumas
+    costo_taza_cafe = costo_taza_cafe + prensa_fee + app_fee
+
+    return costo_taza_cafe
+
     
 
     

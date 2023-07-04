@@ -32,6 +32,7 @@ def after_request(response):
 
 @app.route("/")
 @login_required
+## Estamos ACA
 def index():
     """This is the welcoming site, must show some summary"""
     return apology("TO DO")
@@ -87,6 +88,7 @@ def login():
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
+        session["username"] = rows[0]["username"]
 
         # Redirect user to home page
         return redirect("/")
@@ -153,26 +155,33 @@ def ronda():
         #Quienes tomaron
         tomadores=[]
         for miembro in miembros:
-            if check = request.form.get(miembro, default=False, type=bool):
+            if request.form.get(miembro, default=False, type=bool):
                 tomadores.append(miembro)
 
+        if len(tomadores) == 0:
+            return apology("Tiene que escoger almenos un miembro!")
+
         #Procesar esta info y botar precios
-        costo = price(len(tomadores), prensas[prensa][capacity]], bolsas[bolsa][price])
+        costo = price(len(tomadores), prensas[prensa][capacity], bolsas[bolsa][price], bolsas[bolsa][grams])
+        
+        #Agregar la ronda
+        db.execute("INSERT INTO rondas VALUES (?,?,?,?) ", prensa, bolsa, costo, datetime.datetime.now())
+        ronda_id = len(db.execute("SELECT * from rondas"))
+        #Agregar las incidencias
+        for miembro in miembros:
+            db.execute("INSERT INTO incidencias (ronda_id, user_id) VALUES (?,?,?,?) ", ronda_id, idNumber(miembro))  
 
-
-
-        #Meter a la base de datos
+        #Crear facturas en un csv TODO
         
         return redirect("/")
     else:
-        return render_template("ronda.html")
+        return render_template("ronda.html", prensas = prensas, bolsas = bolsas, miembros = miembros)
 
 @app.route("/history")
 @login_required
 def history():
-    """Show history of transactions"""
-    transactions = db.execute("SELECT * FROM transactions WHERE user_id = ?", session["user_id"])
-    return render_template("history.html", transactions = transactions)
+    """Mostrar historial reciente de rondas de cafe"""
+    return apology("TODO")
 
 
 
