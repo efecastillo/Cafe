@@ -7,9 +7,12 @@ import urllib
 import uuid
 import math
 
+from cs50 import SQL
 from flask import redirect, render_template, session
 from functools import wraps
 
+# Configure CS50 Library to use SQLite database
+db = SQL("sqlite:///cafe.db")
 
 def apology(message, code=400):
     """Render message as an apology to user."""
@@ -39,7 +42,7 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-def price (n, v, p, q):
+def price(n, v, p, q):
     """
     Determina el precio de una tomada.
     n -> Numero de personas
@@ -60,15 +63,11 @@ def price (n, v, p, q):
 
     return costo_taza_cafe
 
-    
-
-    
-
-
+def username(n):
+    query = db.execute("SELECT username FROM users WHERE id=?", n)
+    return query[0]["username"]
 
 
-
-
-
-
-    
+def idn(name):
+    query = db.execute("SELECT * FROM users WHERE username=?", name)
+    return query[0]["id"]

@@ -8,7 +8,7 @@ from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 
 # The local python scripts
-from helpers import apology, login_required
+from helpers import apology, login_required, price, username, idn
 
 # Configure application
 app = Flask(__name__)
@@ -32,10 +32,15 @@ def after_request(response):
 
 @app.route("/")
 @login_required
-## Estamos ACA
 def index():
     """This is the welcoming site, must show some summary"""
-    return apology("TO DO")
+    query = db.execute("SELECT capacity FROM users JOIN prensas ON prensas.owner_id = users.id ")
+    prensa_info=""
+    if query:
+        prensa_info=query[0]["capacity"]
+
+    return render_template("index.html", username = username(session["user_id"]) , french = prensa_info)
+                           
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -108,15 +113,14 @@ def logout():
     # Redirect user to login form
     return redirect("/")
 
-#New stuff incoming here.
 @app.route("/bolsa", methods=["GET", "POST"])
 @login_required
 def bolsa():
     """Registrar bolsa de cafe"""
     if request.method=="POST":
-        name = request.form.get("name")
+        origin = request.form.get("origin")
         price = request.form.get("price")
-        brand = request.form.get("brand")
+        toaster = request.form.get("toaster")
         grams = request.form.get("grams")
          
         #Checar que recibe un numero como precio
@@ -131,10 +135,31 @@ def bolsa():
             return apology("Precio esta raro")
         
         # Ojo con el uso de datetime aqui
-        db.execute("INSERT INTO bolsas (user_id, name, brand, price, grams, date, active) VALUES (?,?,?,?,?,?,?)", session["user_id"], name, brand, int(price), int(grams), datetime.datetime.now(), "YES")
+        db.execute("INSERT INTO bolsas (user_id, origin, toaster, price, grams, date, active) VALUES (?,?,?,?,?,?,?)", session["user_id"], origin, toaster, int(price), int(grams), datetime.datetime.now(), "YES")
         return redirect("/")
     else:
         return render_template("bolsa.html")
+
+@app.route("/prensa", methods=["GET", "POST"])
+@login_required
+def prensa():
+    """Registrar prensa francesa"""
+    if request.method=="POST":
+        capacity = request.form.get("capacity")
+         
+        #Checar que recibe un numero como precio
+        if not capacity.isdigit():
+            return apology("Volumen debe ser un numero entero, por ejemplo 600")
+        #Checar que es mayor que 1000
+        capacity = int(capacity)
+        if capacity <= 0:
+            return apology("Capacidad esta rara")
+        
+        # Ojo con el uso de datetime aqui
+        db.execute("INSERT INTO prensas (owner_id, capacity) VALUES (?,?)", session["user_id"], capacity)
+        return redirect("/")
+    else:
+        return render_template("prensa.html")
 
 @app.route("/ronda", methods=["GET", "POST"])
 @login_required
@@ -143,12 +168,13 @@ def ronda():
     
     #Creamos todas las listas necesarias para las opciones
     db_miembros = db.execute("SELECT username FROM users");
-    miembros = [entry[username] for entry in db_miembros]
-    prensas = db.execute("SELECT username, capacity FROM users JOIN prensas ON prensas.owner_id = users.id")
-    bolsas = db.execute("SELECT origin, toaster, id FROM bolsas")
+    miembros = [entry["username"] for entry in db_miembros]
+    prensas = db.execute("SELECT username, capacity, owner_id, prensas.id FROM users JOIN prensas ON prensas.owner_id = users.id ORDER BY prensas.id")
+    bolsas = db.execute("SELECT origin, toaster, id, user_id FROM bolsas ORDER BY id")
     
 
     if request.method=="POST":
+        #Aca se asume que da los ID de las cosas
         prensa = request.form.get("prensa")
         bolsa = request.form.get("bolsa")
 
@@ -160,16 +186,22 @@ def ronda():
 
         if len(tomadores) == 0:
             return apology("Tiene que escoger almenos un miembro!")
+        
+        if not prensa:
+            return apology("Tiene que escoger prensa")
+
+        if not bolsa:
+            return apology("Tiene que escoger bolsa")
 
         #Procesar esta info y botar precios
-        costo = price(len(tomadores), prensas[prensa][capacity], bolsas[bolsa][price], bolsas[bolsa][grams])
+        costo = price(len(tomadores), prensas[prensa]["capacity"], bolsas[bolsa]["price"], bolsas[bolsa]["grams"])
         
         #Agregar la ronda
         db.execute("INSERT INTO rondas VALUES (?,?,?,?) ", prensa, bolsa, costo, datetime.datetime.now())
-        ronda_id = len(db.execute("SELECT * from rondas"))
-        #Agregar las incidencias
+        ronda_id = db.execute("SELECT COUNT(*) from rondas")[0]["COUNT(*)"]
+        #Agregar las incidencias 
         for miembro in miembros:
-            db.execute("INSERT INTO incidencias (ronda_id, user_id) VALUES (?,?,?,?) ", ronda_id, idNumber(miembro))  
+            db.execute("INSERT INTO incidencias (ronda_id, user_id) VALUES (?,?,?,?) ", ronda_id, idn(miembro))  
 
         #Crear facturas en un csv TODO
         

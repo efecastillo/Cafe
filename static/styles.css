@@ -21,3 +21,13 @@ nav .navbar-brand .green
 {
     color: #2e944b;
 }
+
+/* Para alinear los checkboxes con los textos */
+.check-input {
+  flex: none;
+}
+
+.check-label {
+  flex: none;
+}
+

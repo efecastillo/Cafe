@@ -22,14 +22,15 @@
             {% endfor %}
         </select>
     </div>
+	<h2> Miembros </h2>
 
     {% for miembro in miembros%}
-    <div class="form-check">
-			<input class="form-check-input" type="checkbox" value="true" name="{{miembro}}">
-        <label class="form-check-label" for="flexCheckDefault">
-            {{miembro}}
-        </label>
-    </div>
+    <div class="mb-3">
+		<input class="check-input" type="checkbox" value="{{miembro}}" name="{{miembro}}" >
+		<label class="check-label" >
+			{{miembro}}
+		</label>
+	</div>
     {% endfor %}
     <button class="btn btn-primary" type="submit"> Registrar ronda de Cafe </button>
 	</form>
