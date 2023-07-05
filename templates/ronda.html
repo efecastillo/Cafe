@@ -7,16 +7,16 @@
 {% block main %}
 	<form action="/ronda" method="post">
     <div class="mb-3">
-        <select class="form-select mx-auto w-auto" name="prensa">
-            <option disabled selected>Prensa</option>
+        <select class="form-select mx-auto w-auto" id="prensa" name="prensa">
+            <option disabled selected value="" >Prensa</option>
             {% for prensa in prensas%}
-			<option value="{{prensa[prensa.id]}}">{{prensa.username}} {{ prensa.capacity }} mL</option>
+			<option value="{{prensa.prensa_id}}">{{prensa.username}} {{ prensa.capacity }} mL</option>
             {% endfor %}
         </select>
     </div>
     <div class="mb-3">
-        <select class="form-select mx-auto w-auto" name="bolsa">
-            <option disabled selected>Cafe</option>
+        <select class="form-select mx-auto w-auto" id="bolsa" name="bolsa">
+            <option disabled selected value="" >Cafe</option>
             {% for cafe in bolsas%}
 			<option value="{{cafe.id}}">{{cafe.origin}} {{cafe.toaster}}</option>
             {% endfor %}
@@ -32,7 +32,25 @@
 		</label>
 	</div>
     {% endfor %}
-    <button class="btn btn-primary" type="submit"> Registrar ronda de Cafe </button>
+    <button class="btn btn-primary" id="register" type="submit" disabled> Registrar ronda de Cafe </button>
 	</form>
+
+<script>
+var filled = false;
+let p = document.getElementById("prensa");
+let q = document.getElementById("bolsa");
+let b = document.getElementById("register");
+p.addEventListener('change', function(){
+	if(p.value != '' &&  q.value != ''){
+        filled = true;
+		b.disabled=false;
+    }
+});
+q.addEventListener('change', function(){
+	if(p.value != '' &&  q.value != ''){
+		b.disabled=false;
+    }
+});
+</script>
 {% endblock %}
 

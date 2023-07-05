@@ -4,7 +4,7 @@ CREATE UNIQUE INDEX username ON users (username);
 CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     username TEXT NOT NULL,
-    hash TEXT NOT NULL,
+    hash TEXT NOT NULL
 );
 
 CREATE TABLE bolsas (
@@ -27,7 +27,7 @@ CREATE TABLE rondas (
     cost INTEGER,
     date DATETIME,
     FOREIGN KEY(bolsa_id) REFERENCES bolsas(id),
-    FOREIGN KEY(prensa_id) REFERENCES prensas(id),
+    FOREIGN KEY(prensa_id) REFERENCES prensas(id)
 );
 
 CREATE TABLE prensas (
@@ -41,6 +41,6 @@ CREATE TABLE incidencias (
     ronda_id INTEGER,
     user_id INTEGER,
     FOREIGN KEY(user_id) REFERENCES users(id),
-    FOREIGN KEY(ronda_id) REFERENCES rondas(id),
+    FOREIGN KEY(ronda_id) REFERENCES rondas(id)
 );
 

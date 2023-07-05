@@ -39,7 +39,9 @@ def index():
     if query:
         prensa_info=query[0]["capacity"]
 
-    return render_template("index.html", username = username(session["user_id"]) , french = prensa_info)
+    # Mostrar las ultimas transacciones 
+    rondas = db.execute("SELECT origin, toaster, cost, rondas.date AS fecha FROM bolsas JOIN rondas ON bolsas.id = rondas.bolsa_id ORDER BY rondas.date LIMIT 10")
+    return render_template("index.html", username = username(session["user_id"]) , french = prensa_info, rondas = rondas)
                            
 
 
@@ -93,7 +95,6 @@ def login():
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
-        session["username"] = rows[0]["username"]
 
         # Redirect user to home page
         return redirect("/")
@@ -169,14 +170,14 @@ def ronda():
     #Creamos todas las listas necesarias para las opciones
     db_miembros = db.execute("SELECT username FROM users");
     miembros = [entry["username"] for entry in db_miembros]
-    prensas = db.execute("SELECT username, capacity, owner_id, prensas.id FROM users JOIN prensas ON prensas.owner_id = users.id ORDER BY prensas.id")
-    bolsas = db.execute("SELECT origin, toaster, id, user_id FROM bolsas ORDER BY id")
+    prensas = db.execute("SELECT username, capacity, owner_id, prensas.id AS prensa_id FROM users JOIN prensas ON prensas.owner_id = users.id ORDER BY prensas.id")
+    bolsas = db.execute("SELECT * FROM bolsas ORDER BY id")
     
 
     if request.method=="POST":
         #Aca se asume que da los ID de las cosas
-        prensa = request.form.get("prensa")
-        bolsa = request.form.get("bolsa")
+        prensa = int( request.form.get("prensa"))
+        bolsa = int( request.form.get("bolsa") )
 
         #Quienes tomaron
         tomadores=[]
@@ -187,52 +188,36 @@ def ronda():
         if len(tomadores) == 0:
             return apology("Tiene que escoger almenos un miembro!")
         
-        if not prensa:
-            return apology("Tiene que escoger prensa")
-
-        if not bolsa:
-            return apology("Tiene que escoger bolsa")
 
         #Procesar esta info y botar precios
-        costo = price(len(tomadores), prensas[prensa]["capacity"], bolsas[bolsa]["price"], bolsas[bolsa]["grams"])
+        costo = price(len(tomadores), prensas[prensa-1]["capacity"], bolsas[bolsa-1]["price"], bolsas[bolsa-1]["grams"])
         
         #Agregar la ronda
-        db.execute("INSERT INTO rondas VALUES (?,?,?,?) ", prensa, bolsa, costo, datetime.datetime.now())
+        db.execute("INSERT INTO rondas (prensa_id, bolsa_id, cost, date) VALUES (?,?,?,?) ", prensa, bolsa, costo, datetime.datetime.now())
         ronda_id = db.execute("SELECT COUNT(*) from rondas")[0]["COUNT(*)"]
         #Agregar las incidencias 
         for miembro in miembros:
-            db.execute("INSERT INTO incidencias (ronda_id, user_id) VALUES (?,?,?,?) ", ronda_id, idn(miembro))  
+            db.execute("INSERT INTO incidencias (ronda_id, user_id) VALUES (?,?) ", ronda_id, idn(miembro))  
 
-        #Crear facturas en un csv TODO
-        
         return redirect("/")
     else:
         return render_template("ronda.html", prensas = prensas, bolsas = bolsas, miembros = miembros)
 
-@app.route("/history")
+@app.route("/factura")
 @login_required
-def history():
+def factura():
     """Mostrar historial reciente de rondas de cafe"""
+    bolsas = db.execute("SELECT origin, toaster, price AS precio, date AS fecha, grams AS gramos FROM bolsas JOIN users ON bolsas.user_id = users.id WHERE users.id=?", session["user_id"])
+    tazas = db.execute("SELECT origin, toaster, cost, rondas.date AS fecha FROM rondas JOIN bolsas ON rondas.bolsa_id = bolsas.id JOIN incidencias ON incidencias.ronda_id = rondas.id JOIN users ON incidencias.user_id = users.id WHERE users.id = ? ", session["user_id"])
+
+    bono = db.execute("SELECT SUM(price) FROM bolsas WHERE user_id=?", session["user_id"])[0]["SUM(price)"]
+    total_tazas = db.execute("SELECT SUM(cost) FROM rondas JOIN incidencias ON incidencias.ronda_id = rondas.id WHERE incidencias.user_id = ? ", session["user_id"])[0]["SUM(cost)"]
+    total_final = int(total_tazas)-int(bono)
+    return render_template("factura.html", bolsas = bolsas, tazas = tazas, username = username(session["user_id"]), bono = bono, total_tazas = total_tazas, total_final = total_final )
+
+
     return apology("TODO")
 
 
 
-
-@app.route("/quote", methods=["GET", "POST"])
-@login_required
-def quote():
-    """Get stock quote."""
-    if request.method == "POST":
-        queried_symbol = request.form.get("symbol")
-        info = lookup(queried_symbol)
-        if info == None:
-            return apology("Symbol out of whack.")
-        else:
-            name = info["name"]
-            price = info["price"]
-            symbol = info["symbol"]
-
-        return render_template("quoted.html", name = name, price = usd(price), symbol = symbol)
-    else:
-        return render_template("quote.html")
 

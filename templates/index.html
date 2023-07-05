@@ -16,6 +16,28 @@ Gracias por compartir tu prensa francesa de {{french}} mL.
 {% endif %}
 </p>
 
+<h2> Mas recientes rondas de cafe  </h2>
+<p> Estas son las diez mas recientes tomadas de cafe. <br>
+Para ver el historial completo revisar <a href="/factura"> Factura <a>.
+</p>
+<table class="table">
+	<thead class="thead-dark">
+	<tr>
+		<th scope="col"> Cafe </th>
+		<th scope="col"> Precio  </th>
+		<th scope="col"> Fecha </th>
+	</tr>
+	</thead>
+	<tbody>
+		{% for ronda in rondas %}
+		<tr>
+		<td> {{ronda.origin}} {{ronda.toaster}} </td>
+		<td> {{ ronda.cost}} </td>
+		<td> {{ ronda.fecha}} </td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
 
 {% endblock %}
 
