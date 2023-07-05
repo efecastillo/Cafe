@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block title %}
+	Factura
+{% endblock %}
+
+{% block main %}
+<p> Estimado <b>{{username}}! </b> <br>
+Tu saldo total es {{total_final}}.
+Aca tienes todo el historial completo.
+</p>
+
+{% if bolsas %}
+
+<h2> Bolsas  </h2>
+<p> Por aportar las siguiente bolsas de Cafe el club te debe lo siguiente:</p>
+<table class="table">
+	<thead class="thead-dark">
+	<tr>
+		<th scope="col"> Bolsa </th>
+		<th scope="col"> Gramos  </th>
+		<th scope="col"> Precio  </th>
+		<th scope="col"> Fecha </th>
+	</tr>
+	</thead>
+	<tbody>
+		{% for bolsa in bolsas %}
+		<tr>
+		<td> {{ bolsa.origin }} {{ bolsa.toaster }} </td>
+		<td> {{ bolsa.gramos }}</td>
+		<td> {{ bolsa.precio }} </td>
+		<td> {{ bolsa.fecha.split(' ')[0] }} </td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+<p>En total el Club te debe {{bono}}</p>
+{% endif %}
+<h2> Tazas  </h2>
+<p> Este es el historial de todas las tazas consumidas </p>
+<table class="table">
+	<thead class="thead-dark">
+	<tr>
+		<th scope="col"> Cafe </th>
+		<th scope="col"> Precio  </th>
+		<th scope="col"> Fecha </th>
+	</tr>
+	</thead>
+	<tbody>
+		{% for taza in tazas %}
+		<tr>
+		<td> {{ taza.origin }} {{ taza.toaster }} </td>
+		<td> {{ taza.cost }}</td>
+		<td> {{ taza.fecha }} </td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+<p>En total le debes al club {{total_tazas}}</p>
+{% endblock %}
+
