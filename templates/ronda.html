@@ -24,14 +24,15 @@
     </div>
 	<h2> Miembros </h2>
 
-    {% for miembro in miembros%}
     <div class="mb-3">
+    {% for miembro in miembros%}
 		<input class="check-input" type="checkbox" value="{{miembro}}" name="{{miembro}}" >
 		<label class="check-label" >
 			{{miembro}}
 		</label>
-	</div>
     {% endfor %}
+	</div>
+
     <button class="btn btn-primary" id="register" type="submit" disabled> Registrar ronda de Cafe </button>
 	</form>
 
@@ -51,6 +52,6 @@ q.addEventListener('change', function(){
 		b.disabled=false;
     }
 });
+
 </script>
 {% endblock %}
-
