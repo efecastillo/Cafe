@@ -33,7 +33,28 @@
     {% endfor %}
 	</div>
 
+    <div class="mb-3">
     <button class="btn btn-primary" id="register" type="submit" disabled> Registrar ronda de Cafe </button>
+    </div>
+
+    <div class="mb-3">
+        <button class="btn btn-info" id="guest" type="button" onclick="addGuest();"> Agregar Invitados </button>
+    </div>
+    <div class="mb-3" id="add_guest">
+        <select class="form-select mx-auto w-auto" id="guest" name="guest">
+            <option disabled selected value="" >Miembro</option>
+            {% for miembro in miembros%}
+			<option value="{{miembro}}">{{miembro}}</option>
+            {% endfor %}
+        </select>
+        <select class="form-select mx-auto w-auto" id="cantidad" name="cantidad">
+            <option selected value="0" >Ninguno</option>
+            <option value="1" >Uno</option>
+            <option value="2" >Dos</option>
+            <option value="3" >Tres</option>
+            <option value="4" >Cuatro</option>
+        </select>
+    </div>
 	</form>
 
 <script>
@@ -52,6 +73,10 @@ q.addEventListener('change', function(){
 		b.disabled=false;
     }
 });
+
+function addGuest(){
+   document.getElementById("add_guest").style.display = "block"; 
+}
 
 </script>
 {% endblock %}

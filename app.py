@@ -33,14 +33,15 @@ def after_request(response):
 @app.route("/")
 @login_required
 def index():
-    """This is the welcoming site, must show some summary"""
+    """Bienvenida"""
     query = db.execute("SELECT capacity FROM users JOIN prensas ON prensas.owner_id = users.id ")
     prensa_info=""
     if query:
         prensa_info=query[0]["capacity"]
 
-    # Mostrar las ultimas transacciones 
-    rondas = db.execute("SELECT origin, toaster, cost, rondas.date AS fecha FROM bolsas JOIN rondas ON bolsas.id = rondas.bolsa_id ORDER BY rondas.date LIMIT 10")
+    # Mostrar las ultimas transacciones de todo el club
+    rondas = db.execute("SELECT origin, toaster, cost, rondas.date AS fecha FROM bolsas JOIN rondas ON bolsas.id = rondas.bolsa_id ORDER BY rondas.date DESC LIMIT 5")
+
     return render_template("index.html", username = username(session["user_id"]) , french = prensa_info, rondas = rondas)
                            
 
@@ -187,7 +188,14 @@ def ronda():
 
         if len(tomadores) == 0:
             return apology("Tiene que escoger almenos un miembro!")
-        
+
+        #Agregar invitado
+        if request.form.get("guest"):
+            invitador = request.form.get("guest")
+            cantidad = request.form.get("cantidad")
+            cantidad = int(cantidad)
+            for i in range(cantidad):
+                tomadores.append(invitador)
 
         #Procesar esta info y botar precios
         costo = price(len(tomadores), prensas[prensa-1]["capacity"], bolsas[bolsa-1]["price"], bolsas[bolsa-1]["grams"])
@@ -196,8 +204,8 @@ def ronda():
         db.execute("INSERT INTO rondas (prensa_id, bolsa_id, cost, date) VALUES (?,?,?,?) ", prensa, bolsa, costo, datetime.datetime.now())
         ronda_id = db.execute("SELECT COUNT(*) from rondas")[0]["COUNT(*)"]
         #Agregar las incidencias 
-        for miembro in miembros:
-            db.execute("INSERT INTO incidencias (ronda_id, user_id) VALUES (?,?) ", ronda_id, idn(miembro))  
+        for tomador in tomadores:
+            db.execute("INSERT INTO incidencias (ronda_id, user_id) VALUES (?,?) ", ronda_id, idn(tomador))  
 
         return redirect("/")
     else:
@@ -216,7 +224,6 @@ def factura():
     return render_template("factura.html", bolsas = bolsas, tazas = tazas, username = username(session["user_id"]), bono = bono, total_tazas = total_tazas, total_final = total_final )
 
 
-    return apology("TODO")
 
 
 

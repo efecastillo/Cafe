@@ -4,7 +4,19 @@
 	Inicio
 {% endblock %}
 
+
 {% block main %}
+
+<div class="menu">
+	<div class="row">
+		<div class="col-sm-3"> <a class="nav-link" href="/bolsa">Registrar Bolsa</a> </div>
+		<div class="col-sm-3"> <a class="nav-link" href="/bolsas">Ver Bolsas</a> </div>
+		<div class="col-sm-3"> <a class="nav-link" href="/ronda">Agregar Ronda</a> </div>
+		<div class="col-sm-3"> <a class="nav-link" href="/factura">Ver Factura</a> </div>
+	</div>
+</div>
+
+
 <p> Bienvenido <b>{{username}}! </b> <br>
 {% if french=="" %}
 No tienes registrada ninguna prensa francesa.
@@ -17,8 +29,8 @@ Gracias por compartir tu prensa francesa de {{french}} mL.
 </p>
 
 <h2> Mas recientes rondas de cafe  </h2>
-<p> Estas son las diez mas recientes tomadas de cafe. <br>
-Para ver el historial completo revisar <a href="/factura"> Factura <a>.
+<p> Estas son las cinco mas recientes tomadas de cafe de todo el club. <br>
+Para ver tu historial completo revisar <a href="/factura"> Factura <a>.
 </p>
 <table class="table">
 	<thead class="thead-dark">
