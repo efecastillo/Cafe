@@ -8,20 +8,54 @@
   flex: none;
 }
 
-#add_guest {
-  display: none;
-}
-
 body{
   margin-right: 3.25rem;
   margin-left: 3.25rem;
+  background-color: #F3DEBA;
+  font-family: serif;
 }
 
 p {
-  border: 0.25rem brown;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 .hidden{
   display: none;
+}
+
+.cuadro{
+  border:1px solid black;
+  margin-bottom: 1.5rem;
+  margin-top: 1.5rem;
+  padding: 1rem;
+}
+
+table{
+  background-color: #ABC4AA;
+}
+
+h1 {
+  color: #675D50; 
+  font-weight: 500;
+  margin-top: 2rem;
+}
+
+h2 {
+  color: #A9907E;
+  font-weight: 500;
+}
+
+thead{
+  background-color: #675D50;
+}
+
+th {
+  color: #F3DEBA;
+}
+
+a, a.nav-link { 
+  text-decoration:none; 
+  font-family:verdana, arial, helvetica, sans-serif;
+  color: #AC4425;
 }
 
