@@ -8,55 +8,58 @@
 {% block main %}
 
 
+<div class="md-4 cuadro">
+	<h2> Bolsas de cafe  </h2>
+	<p> Estas son las bolsas de cafe disponibles.  </p>
 
-<h2> Bolsas de cafe  </h2>
-<p> Estas son las bolsas de cafe disponibles.  </p>
-
-<table class="table">
-	<thead class="thead-dark">
-	<tr>
-		<th scope="col"> Cafe </th>
-		<th scope="col"> Precio  </th>
-		<th scope="col"> Gramos  </th>
-		<th scope="col"> Miembro </th>
-	</tr>
-	</thead>
-	<tbody>
-		{% for bolsa in activas %}
-
+	<table class="table table-stripped">
+		<thead >
 		<tr>
-		<td> {{bolsa.origin}} {{bolsa.toaster}} </td>
-		<td> {{ bolsa.precio}} </td>
-		<td> {{ bolsa.grams}} </td>
-		<td> {{ bolsa.miembro}} </td>
+			<th scope="col"> Cafe </th>
+			<th scope="col"> Precio  </th>
+			<th scope="col"> Gramos  </th>
+			<th scope="col"> Miembro </th>
 		</tr>
-		{% endfor %}
-	</tbody>
-</table>
+		</thead>
+		<tbody>
+			{% for bolsa in activas %}
 
-<h2> Bolsas de pasadas  </h2>
-<p> Estas son las bolsas de cafe terminadas.  </p>
+			<tr>
+			<td> {{bolsa.origin}} {{bolsa.toaster}} </td>
+			<td> {{ bolsa.precio}} </td>
+			<td> {{ bolsa.grams}} </td>
+			<td> {{ bolsa.miembro}} </td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
 
-<table class="table">
-	<thead class="thead-dark">
-	<tr>
-		<th scope="col"> Cafe </th>
-		<th scope="col"> Precio  </th>
-		<th scope="col"> Gramos  </th>
-		<th scope="col"> Miembro </th>
-	</tr>
-	</thead>
-	<tbody>
-		{% for bolsa in pasadas %}
+<div class="md-4 cuadro">
+	<h2> Bolsas pasadas  </h2>
+	<p> Estas son las bolsas de cafe terminadas.  </p>
 
+	<table class="table">
+		<thead class="thead-dark">
 		<tr>
-		<td> {{bolsa.origin}} {{bolsa.toaster}} </td>
-		<td> {{ bolsa.precio}} </td>
-		<td> {{ bolsa.grams}}g </td>
-		<td> {{ bolsa.miembro}} </td>
+			<th scope="col"> Cafe </th>
+			<th scope="col"> Precio  </th>
+			<th scope="col"> Gramos  </th>
+			<th scope="col"> Miembro </th>
 		</tr>
-		{% endfor %}
-	</tbody>
-</table>
+		</thead>
+		<tbody>
+			{% for bolsa in pasadas %}
+
+			<tr>
+			<td> {{bolsa.origin}} {{bolsa.toaster}} </td>
+			<td> {{ bolsa.precio}} </td>
+			<td> {{ bolsa.grams}}g </td>
+			<td> {{ bolsa.miembro}} </td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
 {% endblock %}
 
