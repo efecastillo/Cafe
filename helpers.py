@@ -64,6 +64,7 @@ def price(n, v, p, q):
     return costo_taza_cafe
 
 def username(n):
+    n = int(n)
     query = db.execute("SELECT username FROM users WHERE id=?", n)
     return query[0]["username"]
 

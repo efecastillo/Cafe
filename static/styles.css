@@ -11,3 +11,17 @@
 #add_guest {
   display: none;
 }
+
+body{
+  margin-right: 3.25rem;
+  margin-left: 3.25rem;
+}
+
+p {
+  border: 0.25rem brown;
+}
+
+.hidden{
+  display: none;
+}
+

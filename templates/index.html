@@ -16,40 +16,63 @@
 	</div>
 </div>
 
+<h1> Bienvenido {{username}}! </h1>
+<div class="md-3">
+	<p> 
+	{% if french=="" %}
+	No tienes registrada ninguna prensa francesa.
+	Considera aportar a la economia local y <a href="https://cafestore.cl/categoria-producto/metodos-manuales/prensa-francesa/" target="_blank"> Comprar </a>. <br>
+	Si ya tienes una y deseas compartir con el Club puedes <a href="/prensa"> registrarla </a>.
+	{% endif %}
+	{% if french!="" %}
+	Gracias por compartir tu prensa francesa de {{french}} mL.
+	{% endif %}
+	</p>
+</div>
 
-<p> Bienvenido <b>{{username}}! </b> <br>
-{% if french=="" %}
-No tienes registrada ninguna prensa francesa.
-Considera aportar a la economia local y <a href="https://cafestore.cl/categoria-producto/metodos-manuales/prensa-francesa/" target="_blank"> Comprar </a>. <br>
-Si ya tienes una y deseas compartir con el Club puedes <a href="/prensa"> registrarla </a>.
-{% endif %}
-{% if french!="" %}
-Gracias por compartir tu prensa francesa de {{french}} mL.
-{% endif %}
-</p>
-
-<h2> Mas recientes rondas de cafe  </h2>
-<p> Estas son las cinco mas recientes tomadas de cafe de todo el club. <br>
-Para ver tu historial completo revisar <a href="/factura"> Factura <a>.
-</p>
-<table class="table">
-	<thead class="thead-dark">
-	<tr>
-		<th scope="col"> Cafe </th>
-		<th scope="col"> Precio  </th>
-		<th scope="col"> Fecha </th>
-	</tr>
-	</thead>
-	<tbody>
-		{% for ronda in rondas %}
-		<tr>
-		<td> {{ronda.origin}} {{ronda.toaster}} </td>
-		<td> {{ ronda.cost}} </td>
-		<td> {{ ronda.fecha}} </td>
-		</tr>
+<div class="md-3">
+	<p> 
+	{% if bolsas=="" %}
+	No tienes registrada ninguna bolsa de cafe.
+	Si ya tienes una y deseas compartir con el Club puedes <a href="/bolsa"> registrarla </a>.
+	{% endif %}
+	{% if bolsas!="" %}
+	Actualmente ofreces
+	<table class="table">
+		{% for bolsa in bolsas %}
+		<tr> <td> {{bolsa.origin}} {{bolsa.toaster}} </td> <td>  <form action="/cerrar" method="post"> <input value="{{bolsa.numero}}" class="hidden"> <button class="btn btn-outline-danger" type="submit"> Cerrar </button></form>
+ </td><tr>
 		{% endfor %}
-	</tbody>
-</table>
+	</table>	
+	{% endif %}
+	</p>
+</div>
+
+
+<div class="md-4">
+	<h2> Mas recientes rondas de cafe  </h2>
+	<p> Estas son las cinco mas recientes tomadas de cafe de todo el club. <br>
+	Para ver tu historial completo revisar <a href="/factura"> Factura <a>.
+	</p>
+	<table class="table">
+		<thead class="thead-dark">
+		<tr>
+			<th scope="col"> Cafe </th>
+			<th scope="col"> Precio  </th>
+			<th scope="col"> Fecha </th>
+		</tr>
+		</thead>
+		<tbody>
+			{% for ronda in rondas %}
+			<tr>
+			<td> {{ronda.origin}} {{ronda.toaster}} </td>
+			<td> {{ ronda.cost}} </td>
+			<td> {{ ronda.fecha}} </td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
 
 {% endblock %}
-
+    
