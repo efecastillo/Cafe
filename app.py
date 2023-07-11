@@ -35,7 +35,7 @@ def after_request(response):
 def index():
     """Bienvenida"""
     query = db.execute("SELECT capacity FROM users JOIN prensas ON prensas.owner_id = users.id WHERE users.id=?", session["user_id"])
-    queri = db.execute("SELECT origin, toaster, bolsas.id AS numero FROM users JOIN bolsas ON bolsas.user_id = users.id WHERE users.id = ?", session["user_id"])
+    queri = db.execute("SELECT origin, toaster, bolsas.id AS numero FROM users JOIN bolsas ON bolsas.user_id = users.id WHERE users.id = ? AND active = 'YES'", session["user_id"])
     prensa_info=""
     bolsa_info=""
     if query:
@@ -219,7 +219,7 @@ def ronda():
 @login_required
 def factura():
     """Mostrar historial reciente de rondas de cafe"""
-    bolsas = db.execute("z", session["user_id"])
+    bolsas = db.execute("SELECT origin, toaster, price AS precio, date AS fecha, grams AS gramos FROM bolsas JOIN users ON bolsas.user_id = users.id WHERE users.id=? ORDER BY fecha DESC", session["user_id"])
     tazas = db.execute("SELECT origin, toaster, cost, rondas.date AS fecha FROM rondas JOIN bolsas ON rondas.bolsa_id = bolsas.id JOIN incidencias ON incidencias.ronda_id = rondas.id JOIN users ON incidencias.user_id = users.id WHERE users.id = ? ORDER BY fecha DESC ", session["user_id"])
 
     bono = db.execute("SELECT SUM(price) FROM bolsas WHERE user_id=?", session["user_id"])[0]["SUM(price)"]
@@ -254,7 +254,12 @@ def bolsas():
 @login_required
 def cerrar():
     """Cerrar bolsa de cafe"""
-    cafe = int(request.form.get("cafe"))
-    
-    db.execute("UPDATE bolsas SET active = 'NO' WHERE id=? ", cafe)
-    return redirect("/")
+    if request.method == "POST":
+        cafe = request.form.items()
+        numero = list(cafe)[0][0]
+        numero = int(numero)
+        print(numero)
+        db.execute("UPDATE bolsas SET active = 'NO' WHERE id=? ", numero)
+        return redirect("/")
+    else:
+        return
