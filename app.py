@@ -219,8 +219,8 @@ def ronda():
 @login_required
 def factura():
     """Mostrar historial reciente de rondas de cafe"""
-    bolsas = db.execute("SELECT origin, toaster, price AS precio, date AS fecha, grams AS gramos FROM bolsas JOIN users ON bolsas.user_id = users.id ORDER BY fecha DESC WHERE users.id=?", session["user_id"])
-    tazas = db.execute("SELECT origin, toaster, cost, rondas.date AS fecha FROM rondas JOIN bolsas ON rondas.bolsa_id = bolsas.id JOIN incidencias ON incidencias.ronda_id = rondas.id JOIN users ON incidencias.user_id = users.id ORDER BY fecha DESC WHERE users.id = ? ", session["user_id"])
+    bolsas = db.execute("z", session["user_id"])
+    tazas = db.execute("SELECT origin, toaster, cost, rondas.date AS fecha FROM rondas JOIN bolsas ON rondas.bolsa_id = bolsas.id JOIN incidencias ON incidencias.ronda_id = rondas.id JOIN users ON incidencias.user_id = users.id WHERE users.id = ? ORDER BY fecha DESC ", session["user_id"])
 
     bono = db.execute("SELECT SUM(price) FROM bolsas WHERE user_id=?", session["user_id"])[0]["SUM(price)"]
     total_tazas = db.execute("SELECT SUM(cost) FROM rondas JOIN incidencias ON incidencias.ronda_id = rondas.id WHERE incidencias.user_id = ? ", session["user_id"])[0]["SUM(cost)"]
@@ -232,8 +232,11 @@ def factura():
 @login_required
 def bolsas():
     """Ver todas las bolsas disponibles"""
-    bolsas = db.execute("SELECT origin, toaster, price AS precio, date AS fecha, users.id AS miembro, active, grams AS gramos FROM bolsas JOIN users ON bolsas.user_id = users.id ")
-
+    bolsas = db.execute("SELECT origin, toaster, price AS precio, date AS fecha, users.id AS miembro, active, grams FROM bolsas JOIN users ON bolsas.user_id = users.id ")
+    for bolsa in bolsas:
+        n=bolsa["miembro"]
+        temp = username(n)
+        bolsa["miembro"]=temp
     bolsas_activas = []
     bolsas_pasadas = []
     for bolsa in bolsas:
