@@ -41,7 +41,7 @@
     <div class="mb-3">
         <button class="btn btn-info" id="guest" type="button" onclick="addGuest();"> Agregar Invitados </button>
     </div>
-    <div class="mb-3 hidden">
+    <div class="mb-3 hidden" id="add_guest">
         <select class="form-select mx-auto w-auto" id="guest" name="guest">
             <option disabled selected value="" >Miembro</option>
             {% for miembro in miembros%}
