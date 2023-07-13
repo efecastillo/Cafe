@@ -1,5 +1,14 @@
+
 #Ignore the sessions
 flask_session
 flask_session/
 flask_session/*
 
+#Ignore pycahce
+__pycache__/
+*.pyc
+
+.gitignore
+__pycache__/app.cpython-311.pyc
+__pycache__/helpers.cpython-311.pyc
+flask_session/2029240f6d1128be89ddc32729463129
