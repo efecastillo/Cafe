@@ -1,3 +1,5 @@
 #Ignore the sessions
+flask_session
+flask_session/
 flask_session/*
 
