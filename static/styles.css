@@ -59,3 +59,12 @@ a, a.nav-link {
   color: #AC4425;
 }
 
+.imgn {
+  float: right;
+}
+
+img{
+  max-height: 200rem;
+}
+
+
