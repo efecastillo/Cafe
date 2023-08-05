@@ -3,6 +3,7 @@
 flask_session
 flask_session/
 flask_session/*
+flask_session
 
 #Ignore pycahce
 __pycache__/
